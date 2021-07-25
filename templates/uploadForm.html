@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+    <header>
+        <div class ="Hmain">
+            <img src = "/static/images/SET/HEADER.png" height="30%" width="30%">    
+        </div>
+    </header>
+
+
+    <p>1.TITLE 2.DESCRIPTION 3.DATE 4.GENRE 5.IMAGE</p>
+
+
+    <form action="/upload" method="post" enctype="multipart/form-data" >
+    
+        
+        <input type="text" name="title_name">
+        <input type="text" name="desc_name">
+        <input type="text" name="date_name">
+        <select name = "genre_name">
+            {% for item in results %}
+            
+                <option value="{{item[0]}}">{{item[1]}}</option>
+            
+            {% endfor %}
+        </select>
+        <input type="file" name="file_name" accept=".png,.jpg">
+        <input type="submit" value="submit" >
+
+    </form>
+
+    
+    
+</body>
+</html>
