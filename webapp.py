@@ -82,6 +82,7 @@ def upload_file():
         print(t,d,D,g,filename)
         data = (t,d,D,g,str(filename))
         cursor.execute(sql,data)
+        get_db().commit()
         return redirect (url_for("content"))
     return render_template ("uploadForm.html", results=results)
 
