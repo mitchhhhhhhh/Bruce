@@ -37,28 +37,37 @@ def content():
     return render_template("content.html", results=results, Genres=Genres)
 
 
+@app.route('/blank')
+def Error():
+    return render_template("blank.html")
+
+
 @app.route('/Genre/<int:id>')
 def genre(id):
     cursor = get_db().cursor()
     sql = "SELECT content.name,content.image, genre.genreName,content.id FROM content JOIN genre ON content.Genre = genre.id WHERE content.Genre = ?"
     cursor.execute(sql,(id,))
     results = cursor.fetchall()
-    sql = "SELECT genre.id,genre.genreName FROM genre "
-    cursor.execute(sql)
-    Genres = cursor.fetchall()
-    return render_template("Genre.html", results=results,Genre=results[0][2], Genres=Genres)
+
+    try:
+        sql = "SELECT genre.id,genre.genreName FROM genre "
+        cursor.execute(sql)
+        Genres = cursor.fetchall()
+        return render_template("Genre.html", results=results,Genre=results[0][2], Genres=Genres)
+    except:
+        return redirect (url_for("Error"))
 
 
 @app.route('/Game/<int:id>')
 def game(id):
     cursor = get_db().cursor()
-    sql = "SELECT content.name, content.image, content.description FROM content WHERE id = ?"
+    sql = "SELECT content.name, content.image, content.description,content.date FROM content WHERE id = ?"
     cursor.execute(sql,(id,))
     results = cursor.fetchall()
     sql = "SELECT genre.id,genre.genreName FROM genre "
     cursor.execute(sql)
     Genres = cursor.fetchall()
-    return render_template("game.html", results=results,Desc=results[0][2],Title=results[0][0],Genres=Genres)
+    return render_template("game.html", results=results,Desc=results[0][2],Title=results[0][0],Date=results[0][3],Genres=Genres)
 
 
 @app.route('/upload', methods=['GET', 'POST'])
@@ -85,6 +94,18 @@ def upload_file():
         get_db().commit()
         return redirect (url_for("content"))
     return render_template ("uploadForm.html", results=results)
+
+
+@app.route('/uploadGenre', methods=['GET', 'POST'])
+def upload_Genre():
+    if request.method == 'POST':  
+        Genre = request.form.get('genre') 
+        cursor = get_db().cursor()
+        sql = "INSERT INTO genre (genreName) VALUES (?)"
+        cursor.execute(sql,(Genre,))
+        get_db().commit()
+        return redirect (url_for("content"))
+    return render_template ("uploadGenreForm.html")
 
 
 

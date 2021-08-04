@@ -21,24 +21,15 @@
     </ul>
 
     <div class = uploadText>
-        <p>1.TITLE 2.DESCRIPTION 3.DATE 4.GENRE 5.IMAGE</p>
+        <p>Genre</p>
     </div> 
 
     <div class = forms>
-        <form action="/upload" method="post" enctype="multipart/form-data" >
+        <form action="/uploadGenre" method="post" enctype="multipart/form-data" >
         
             
-            <input type="text" name="title_name">
-            <input type="text" name="desc_name">
-            <input type="text" name="date_name">
-            <select name = "genre_name">
-                {% for item in results %}
-                
-                    <option value="{{item[0]}}">{{item[1]}}</option>
-                
-                {% endfor %}
-            </select>
-            <input type="file" name="file_name" accept=".png,.jpg">
+            <input type="text" name="genre">
+        
             <input type="submit" value="submit" >
 
         </form>

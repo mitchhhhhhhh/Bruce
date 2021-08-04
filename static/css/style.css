@@ -27,12 +27,21 @@ header{
 .desc{
   margin-top: 50px;
   margin-bottom: 50px;
-  margin-left: 500px;
-  margin-right: 500px;
+  padding: 1%;
   text-align: center;
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   font-size: 30px;
   background-color:  #d1d1d1;
+}
+
+.date{
+  margin-top: 50px;
+  margin-bottom: 50px;
+  text-align: center;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-size: 30px;
+  background-color:  #d1d1d1;
+  
 }
 
 .Hmain{
@@ -57,8 +66,7 @@ header{
   margin-top: 3%;
   opacity: 1; 
   display: block;
-  margin-left: auto;
-  margin-right: auto;
+  margin-left: ;
   text-align: center;
   background-color: #d1d1d1;
   padding-top: 1%;
@@ -68,7 +76,7 @@ header{
 
 .title{
   color: black;
-  margin-left: 20px;
+
   background-color:  #d1d1d1;
 }
 
@@ -143,4 +151,20 @@ li a:hover:not(.active) {
 
 .active {
   background-color:  #423f3f;
+}
+
+
+.uploadText{
+  font-size: x-large;
+  text-align: center;
+}
+.forms{
+  text-align: center;
+}
+
+footer{
+  background-color: #423f3f;
+  margin-top: 15%;
+  font-size: 300%;
+  text-align: center;
 }
