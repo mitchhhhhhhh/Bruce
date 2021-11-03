@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Game Base</title>
+    <link rel="shortcut icon" href="/static/images/SET/icon.png" />
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
@@ -17,35 +18,57 @@
 
 
     <ul>
-        <li><a href="http://127.0.0.1:5000">Home</a></li>   
+        <li><a href="{{url_for('content')}}">Home</a></li>
+        <li><a href="{{url_for('upload_file')}}">Upload</a></li>
+        <li><a href="{{url_for('upload_Genre')}}">Upload Genre</a></li>
+        <li><a href="{{url_for('choose_delete_game')}}">Delete</a></li>
+        {% for item in Genres %}
+            
+         <li><a href="{{url_for('genre',id = item[0] )}}">{{item[1]}}</a></li>
+            
+        {% endfor %}
+        
     </ul>
 
     <div class = uploadText>
-        <p>1.TITLE 2.DESCRIPTION 3.DATE 4.GENRE 5.IMAGE</p>
+        <p>UPLOAD</p>
     </div> 
 
     <div class = forms>
         <form action="/upload" method="post" enctype="multipart/form-data" >
         
             
-            <input type="text" name="title_name">
-            <input type="text" name="desc_name">
-            <input type="text" name="date_name">
-            <select name = "genre_name">
+            <input type="text" name="title_name" placeholder="Title"required>
+            <input type="text" name="desc_name" placeholder="Description"required>
+            <input type="text" name="date_name" placeholder="Date"required>
+            <select name = "genre_name" required>
                 {% for item in results %}
                 
                     <option value="{{item[0]}}">{{item[1]}}</option>
                 
                 {% endfor %}
             </select>
-            <input type="file" name="file_name" accept=".png,.jpg">
+            <input type="file" name="file_name" accept=".png,.jpg" required><br><br>
+            <label>Password:</label><br>
+            <input type="password" placeholder="password" required><br><br>
             <input type="submit" value="submit" >
 
         </form>
     </div>
 
     
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class=red>
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+    {% block body %}{% endblock %}
+
     
 </body>
-<footer>mitch</footer>
+<footer>Cool upload function</footer>
 </html>

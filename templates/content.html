@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Game Base</title>
+    <link rel="shortcut icon" href="/static/images/SET/icon.png" />
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
@@ -16,12 +17,13 @@
 
 
     <ul>
-        <li><a href="http://127.0.0.1:5000">Home</a></li>
-        <li><a href="http://127.0.0.1:5000/upload">Upload</a></li>
-        <li><a href="http://127.0.0.1:5000/uploadGenre">Upload Genre</a></li>
+        <li><a href="{{url_for('content')}}">Home</a></li>
+        <li><a href="{{url_for('upload_file')}}">Upload</a></li>
+        <li><a href="{{url_for('upload_Genre')}}">Upload Genre</a></li>
+        <li><a href="{{url_for('choose_delete_game')}}">Delete</a></li>
         {% for item in Genres %}
             
-         <li><a href="http://127.0.0.1:5000/Genre/{{item[0]}}">{{item[1]}}</a></li>
+         <li><a href="{{url_for('genre',id = item[0] )}}">{{item[1]}}</a></li>
             
         {% endfor %}
         
@@ -40,7 +42,7 @@
         {% for item in results %}
             
             <div class="container"> 
-                <a href="http://127.0.0.1:5000/Game/{{item[0]}}">
+                <a href="{{url_for('game',id = item[0] )}}">
                 <img src= "/static/images/{{item[1]}}"  alt={{item[1]}} class="image" width ="256px" height = "363px">   
                 </a>
             </div>     
@@ -48,5 +50,5 @@
         {% endfor %}
     </div>
 </body>
-<footer>mitch</footer>
+<footer>Welcome to Game Base</footer>
 </html>

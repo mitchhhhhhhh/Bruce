@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Base</title>
     <link rel="shortcut icon" href="/static/images/SET/icon.png" />
-    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/styleD.css">
 </head>
 <body>
+
 
     <header>
         <div class ="Hmain">
@@ -29,36 +30,32 @@
         
     </ul>
 
-    <div class="title">
-        <h3>{{Title}}</h3>
-    </div>
+    <div class = uploadText>
+        <p>YOU ARE ABOUT TO DELETE: {{name}}</p>
+        <br>
+    </div> 
 
-
-    {% for item in results %}
-        
-        
-        <div class= "imageSingleDisplay">
+    <div class = forms>
+        <form action="/Delete/{{id}}" method="post" enctype="multipart/form-data" >
             
-            <img src= "/static/images/{{item[1]}}"  alt={{item[1]}} width="256px" height="363px">   
-        </div> 
-        
+            <label>Password:</label><br>
+            <input type="password" name="password"><br><br>
+            <input type="submit" placeholder="CONFIRM" >
 
-    {% endfor %}
-
-
-   
-    
-    <div class = desc>
-        <p>{{Desc}}</p>
+        </form>
     </div>
 
-
-    <div class=date>
-        <p>{{Date}}</p>
-    </div>
-    
-    
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class=red>
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+    {% block body %}{% endblock %}
     
 </body>
-<footer>Game Base is a registered trade mark of mitch willis</footer>
+<footer>delete a game here</footer>
 </html>

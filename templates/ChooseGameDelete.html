@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Base</title>
     <link rel="shortcut icon" href="/static/images/SET/icon.png" />
-    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/styleD.css">
 </head>
 <body>
+
 
     <header>
         <div class ="Hmain">
@@ -29,36 +30,28 @@
         
     </ul>
 
-    <div class="title">
-        <h3>{{Title}}</h3>
-    </div>
-
-
-    {% for item in results %}
-        
-        
-        <div class= "imageSingleDisplay">
+    <div class=genre>
+        <h1>
             
-            <img src= "/static/images/{{item[1]}}"  alt={{item[1]}} width="256px" height="363px">   
-        </div> 
-        
-
-    {% endfor %}
-
-
-   
-    
-    <div class = desc>
-        <p>{{Desc}}</p>
+            DELETE
+            
+        </h1>
     </div>
 
-
-    <div class=date>
-        <p>{{Date}}</p>
+    <div class="row">
+        {% for item in results %}
+            
+            <div class="container"> 
+                <a href="{{url_for('delete',id = item[0] )}}">
+                <img src= "/static/images/{{item[1]}}"  alt={{item[1]}} class="image" width ="256px" height = "363px">   
+                </a>
+            </div>     
+            
+        {% endfor %}
     </div>
-    
+
     
     
 </body>
-<footer>Game Base is a registered trade mark of mitch willis</footer>
+<footer>Delete a game here</footer>
 </html>

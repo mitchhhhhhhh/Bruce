@@ -1,8 +1,9 @@
 #imports necessary components
-from flask import Flask, render_template, g, request, redirect, url_for
+from flask import Flask, flash, render_template, g, request, redirect, url_for
 from werkzeug.utils import secure_filename
 import sqlite3
 app = Flask(__name__)
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 
 #defines the databse as DATABASE
@@ -37,10 +38,6 @@ def content():
     return render_template("content.html", results=results, Genres=Genres)
 
 
-@app.route('/blank')
-def Error():
-    return render_template("blank.html")
-
 
 @app.route('/Genre/<int:id>')
 def genre(id):
@@ -48,15 +45,17 @@ def genre(id):
     sql = "SELECT content.name,content.image, genre.genreName,content.id FROM content JOIN genre ON content.Genre = genre.id WHERE content.Genre = ?"
     cursor.execute(sql,(id,))
     results = cursor.fetchall()
-
-    try:
+    if len(results) > 0:
         sql = "SELECT genre.id,genre.genreName FROM genre "
         cursor.execute(sql)
         Genres = cursor.fetchall()
         return render_template("Genre.html", results=results,Genre=results[0][2], Genres=Genres)
-    except:
-        return redirect (url_for("Error"))
-
+    else:
+        sql = "SELECT genre.id,genre.genreName FROM genre "
+        cursor.execute(sql)
+        Genres = cursor.fetchall()
+        flash('sorry no games have been added to this genre as of now')
+        return render_template("Genre.html", Genres=Genres)
 
 @app.route('/Game/<int:id>')
 def game(id):
@@ -82,31 +81,87 @@ def upload_file():
         D = request.form.get('date_name')
         g = request.form.get('genre_name')
         f = request.files['file_name']
+        pw = request.form.get('password')
         filename = secure_filename(f.filename)
         f.save('static/images/' + filename)
-        cursor = get_db().cursor()
-        sql = "INSERT INTO content (name,description,date,Genre,image) VALUES (?,?,?,?,?)"
-        print(filename)
-        print(f)
-        print(t,d,D,g,filename)
-        data = (t,d,D,g,str(filename))
-        cursor.execute(sql,data)
-        get_db().commit()
-        return redirect (url_for("content"))
-    return render_template ("uploadForm.html", results=results)
+        if pw == "admin":    
+            cursor = get_db().cursor()
+            sql = "INSERT INTO content (name,description,date,Genre,image) VALUES (?,?,?,?,?)"
+            print(filename)
+            print(f)
+            print(t,d,D,g,filename)
+            data = (t,d,D,g,str(filename))
+            cursor.execute(sql,data)
+            get_db().commit()
+            return redirect (url_for("content"))
+        else:
+            flash('incorrect password please try again')
+            return redirect (url_for("upload_file"))
+    cursor = get_db().cursor()
+    sql = "SELECT genre.id,genre.genreName FROM genre "
+    cursor.execute(sql)
+    Genres = cursor.fetchall()
+    return render_template ("uploadForm.html", results=results, Genres=Genres)
 
 
-@app.route('/uploadGenre', methods=['GET', 'POST'])
+@app.route('/uploadGenre', methods=['GET','POST'])
 def upload_Genre():
     if request.method == 'POST':  
+        pww = request.form.get('password')
         Genre = request.form.get('genre') 
-        cursor = get_db().cursor()
-        sql = "INSERT INTO genre (genreName) VALUES (?)"
-        cursor.execute(sql,(Genre,))
-        get_db().commit()
-        return redirect (url_for("content"))
-    return render_template ("uploadGenreForm.html")
+        if pww == "admin":
+            cursor = get_db().cursor()
+            sql = "INSERT INTO genre (genreName) VALUES (?)"
+            cursor.execute(sql,(Genre,))
+            get_db().commit()
+            return redirect (url_for("content"))
+        else:
+            flash('incorrect password please try again')
+            return redirect (url_for("upload_Genre"))
+    cursor = get_db().cursor()
+    sql = "SELECT genre.id,genre.genreName FROM genre "
+    cursor.execute(sql)
+    Genres = cursor.fetchall()
+    return render_template ("uploadGenreForm.html", Genres=Genres)
 
+
+@app.route('/CDG' , methods=['GET','POST'])
+def choose_delete_game():
+    cursor = get_db().cursor()
+    sql = "SELECT  content.id,content.image, content.Genre,content.name FROM content "
+    cursor.execute(sql)
+    results = cursor.fetchall()
+    cursor = get_db().cursor()
+    sql = "SELECT genre.id,genre.genreName FROM genre "
+    cursor.execute(sql)
+    Genres = cursor.fetchall()
+    return render_template("ChooseGameDelete.html", results=results, Genres=Genres)
+
+@app.route('/Delete/<int:id>', methods=['GET','POST'])
+def delete(id): 
+    cursor = get_db().cursor()
+    sql = "SELECT  content.id,content.image, content.Genre,content.name FROM content WHERE id =?"
+    cursor.execute(sql,(id,))
+    results = cursor.fetchall()
+    cursor = get_db().cursor()
+    sql = "SELECT genre.id,genre.genreName FROM genre "
+    cursor.execute(sql)
+    Genres = cursor.fetchall()
+    if request.method == 'POST':  
+        password = request.form.get('password')
+        if password == "admin": #;)
+            cursor = get_db().cursor()
+            sql = "DELETE FROM content WHERE id =?"
+            cursor.execute(sql,(id,))
+            get_db().commit()
+            return redirect (url_for("content"))
+        else:
+            flash('incorrect password please try again')
+            return redirect(url_for('delete', results=results,name=results[0][3],id = id, Genres=Genres))
+    
+    return render_template("delete.html", results=results,name=results[0][3],id = id, Genres=Genres)
+
+    
 
 
 

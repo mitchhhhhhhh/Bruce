@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Game Base</title>
+    <link rel="shortcut icon" href="/static/images/SET/icon.png" />
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
@@ -17,7 +18,16 @@
 
 
     <ul>
-        <li><a href="http://127.0.0.1:5000">Home</a></li>   
+        <li><a href="{{url_for('content')}}">Home</a></li>
+        <li><a href="{{url_for('upload_file')}}">Upload</a></li>
+        <li><a href="{{url_for('upload_Genre')}}">Upload Genre</a></li>
+        <li><a href="{{url_for('choose_delete_game')}}">Delete</a></li>
+        {% for item in Genres %}
+            
+         <li><a href="{{url_for('genre',id = item[0] )}}">{{item[1]}}</a></li>
+            
+        {% endfor %}
+        
     </ul>
 
     <div class = uploadText>
@@ -27,16 +37,27 @@
     <div class = forms>
         <form action="/uploadGenre" method="post" enctype="multipart/form-data" >
         
-            
-            <input type="text" name="genre">
-        
+            <input type="text" name="genre" placeholder="Genre"required><br><br>
+            <label>Password:</label><br>
+            <input type="password" name="password" placeholder="Password" required><br><br>
             <input type="submit" value="submit" >
 
         </form>
     </div>
 
     
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class=red>
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+    {% block body %}{% endblock %}
+
     
 </body>
-<footer>mitch</footer>
+<footer>Cool uplaod function</footer>
 </html>
